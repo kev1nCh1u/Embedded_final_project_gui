@@ -8,42 +8,19 @@ from vtk import *
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
-class vtkMW(QMainWindow):
-    """docstring for Mainwindow"""
+class Visualization3d(QWidget):
 
     def __init__(self, parent=None):
-        super(vtkMW, self).__init__(parent)
-        self.basic()
+        super(Visualization3d, self).__init__(parent)
         vll = self.kuangti()
-        # self.setCentralWidget(vll) # 窗口基础属性
 
-        #按鈕
-        self.button1 = QPushButton('button1')
-        self.button2 = QPushButton('button2')
-        # self.button1.clicked.connect()
-
-        #佈局--水平佈局
-        layout = QHBoxLayout()
-        layout2 = QVBoxLayout()
+        # layout
+        self.setMinimumSize(800, 800)
+        layout = QGridLayout()
         layout.addWidget(vll)
-        layout2.addWidget(self.button1)
-        layout2.addWidget(self.button2)
-        layout.addLayout(layout2)
-
-        # 視窗中心控制元件
-        main_frame = QWidget()
-        main_frame.setLayout(layout)
-        self.setCentralWidget(main_frame)
-
-    def basic(self):
-        # 设置标题，大小，图标
-        self.setWindowTitle("NTUST MAZE by kevin")
-        self.resize(900, 650)
-        # self.setWindowIcon(QIcon("./image/Gt1.png"))
-        self.setWindowIcon(QIcon("img/ntust.png"))
+        self.setLayout(layout)
 
     def kuangti(self):
-
         frame = QFrame()
         vl = QVBoxLayout()
         vtkWidget = QVTKRenderWindowInteractor()
@@ -82,7 +59,18 @@ class vtkMW(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    win = vtkMW()
-    win.show()
+
+    app.setApplicationName("NTUST MAZE by kevin")
+    app.setWindowIcon(QIcon("img/ntust.png"))
+
+    window = QWidget()
+    layout = QGridLayout()
+
+    v3d_qwidget = Visualization3d()
+    layout.addWidget(v3d_qwidget)
+
+    window.setLayout(layout)
+
+    window.show()
     # win.iren.Initialize()
     sys.exit(app.exec_())

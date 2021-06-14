@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import sys
 from enum import Enum
+import math
 
 class Direction(Enum):
     Left = 0
@@ -13,7 +14,7 @@ class Direction(Enum):
 class Joystick(QWidget):
     def __init__(self, parent=None):
         super(Joystick, self).__init__(parent)
-        self.setMinimumSize(100, 100)
+        self.setMinimumSize(150, 150)
         self.movingOffset = QPointF(0, 0)
         self.grabCenter = False
         self.__maxDistance = 50
@@ -42,19 +43,23 @@ class Joystick(QWidget):
 
     def joystickDirection(self):
         if not self.grabCenter:
-            return 0
+            return (0, 0)
         normVector = QLineF(self._center(), self.movingOffset)
         currentDistance = normVector.length()
         angle = normVector.angle()
+        x = currentDistance * math.cos(math.radians(angle))
+        y = currentDistance * math.sin(math.radians(angle))
+        return (x, y)
+        # return (currentDistance, angle)
 
-        distance = min(currentDistance / self.__maxDistance, 1.0)
-        if 45 <= angle < 135:
-            return (Direction.Up, distance)
-        elif 135 <= angle < 225:
-            return (Direction.Left, distance)
-        elif 225 <= angle < 315:
-            return (Direction.Down, distance)
-        return (Direction.Right, distance)
+        # distance = min(currentDistance / self.__maxDistance, 1.0)
+        # if 45 <= angle < 135:
+        #     return (Direction.Up, distance)
+        # elif 135 <= angle < 225:
+        #     return (Direction.Left, distance)
+        # elif 225 <= angle < 315:
+        #     return (Direction.Down, distance)
+        # return (Direction.Right, distance)
 
 
     def mousePressEvent(self, ev):
@@ -68,7 +73,7 @@ class Joystick(QWidget):
 
     def mouseMoveEvent(self, event):
         if self.grabCenter:
-            print("Moving")
+            # print("Moving")
             self.movingOffset = self._boundJoystick(event.pos())
             self.update()
         print(self.joystickDirection())
