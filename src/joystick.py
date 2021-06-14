@@ -5,11 +5,13 @@ import sys
 from enum import Enum
 import math
 
+
 class Direction(Enum):
     Left = 0
     Right = 1
     Up = 2
     Down = 3
+
 
 class Joystick(QWidget):
     def __init__(self, parent=None):
@@ -18,10 +20,12 @@ class Joystick(QWidget):
         self.movingOffset = QPointF(0, 0)
         self.grabCenter = False
         self.__maxDistance = 50
+        self.joyPosXY = (0, 0)
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        bounds = QRectF(-self.__maxDistance, -self.__maxDistance, self.__maxDistance * 2, self.__maxDistance * 2).translated(self._center())
+        bounds = QRectF(-self.__maxDistance, -self.__maxDistance,
+                        self.__maxDistance * 2, self.__maxDistance * 2).translated(self._center())
         painter.drawEllipse(bounds)
         painter.setBrush(Qt.black)
         painter.drawEllipse(self._centerEllipse())
@@ -33,7 +37,6 @@ class Joystick(QWidget):
 
     def _center(self):
         return QPointF(self.width()/2, self.height()/2)
-
 
     def _boundJoystick(self, point):
         limitLine = QLineF(self._center(), point)
@@ -61,7 +64,6 @@ class Joystick(QWidget):
         #     return (Direction.Down, distance)
         # return (Direction.Right, distance)
 
-
     def mousePressEvent(self, ev):
         self.grabCenter = self._centerEllipse().contains(ev.pos())
         return super().mousePressEvent(ev)
@@ -70,13 +72,16 @@ class Joystick(QWidget):
         self.grabCenter = False
         self.movingOffset = QPointF(0, 0)
         self.update()
+        self.joyPosXY = (0, 0)
 
     def mouseMoveEvent(self, event):
         if self.grabCenter:
             # print("Moving")
             self.movingOffset = self._boundJoystick(event.pos())
             self.update()
-        print(self.joystickDirection())
+        self.joyPosXY = self.joystickDirection()
+        # print(self.joyPosXY)
+
 
 if __name__ == '__main__':
     # Create main application window
@@ -92,14 +97,14 @@ if __name__ == '__main__':
     cw.setLayout(ml)
     mw.setCentralWidget(cw)
 
-    # Create joystick 
+    # Create joystick
     joystick = Joystick()
 
     # ml.addLayout(joystick.get_joystick_layout(),0,0)
-    ml.addWidget(joystick,0,0)
+    ml.addWidget(joystick, 0, 0)
 
     mw.show()
 
-    ## Start Qt event loop unless running in interactive mode or using pyside.
+    # Start Qt event loop unless running in interactive mode or using pyside.
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QApplication.instance().exec_()

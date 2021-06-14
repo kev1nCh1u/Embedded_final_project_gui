@@ -12,6 +12,7 @@ class Visualization3d(QWidget):
 
     def __init__(self, parent=None):
         super(Visualization3d, self).__init__(parent)
+        self.render = vtk.vtkRenderer()
         vll = self.kuangti()
 
         # layout
@@ -26,13 +27,19 @@ class Visualization3d(QWidget):
         vtkWidget = QVTKRenderWindowInteractor()
         vl.addWidget(vtkWidget)
         # vl.setContentsMargins(0,0,0,0)
-        ren = vtk.vtkRenderer()
-        ren.SetBackground(0.95, 0.95, 0.95)
-        # renderer.GetActiveCamera().SetPosition() #设置视点位置
-        # renderer.GetActiveCamera().SetViewUp(0, 1, 0)  #设置视点方向
-        vtkWidget.GetRenderWindow().AddRenderer(ren)
+        self.render = vtk.vtkRenderer()
+        self.render.SetBackground(0.95, 0.95, 0.95)
+        
+        self.render.GetActiveCamera().SetPosition(0, 0, 1) #设置视点位置
+        
+        # self.render.GetActiveCamera().SetViewUp(1, 1, 0)  #设置视点方向
+        # self.render.GetActiveCamera().Azimuth(90)
+        # self.render.GetActiveCamera().Elevation(180)Roll
+        # self.render.GetActiveCamera().Roll(180)
+
+        vtkWidget.GetRenderWindow().AddRenderer(self.render)
         self.iren = vtkWidget.GetRenderWindow().GetInteractor()
-        self.Creatobj(ren)
+        self.Creatobj(self.render)
         self.iren.Initialize()
         frame.setLayout(vl)
         return frame
