@@ -1,9 +1,9 @@
 
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QKeySequence, QPalette, QColor
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 import joystick
 import pyqt_3d
@@ -21,20 +21,29 @@ def TimerLoop():
 
 def Combobox1Changed(text):
     # print(text)
-    ser.changePort(text)
+    label1.setText(ser.changePort(text))
 
+def refresh():
+    ser.close()
+    ports = kevin_serial.serial_ports()
+    # print('refresh',ports)
+    combobox1.clear()
+    combobox1.addItems(ports)
+    
 def connect():
-    ser.open()
+    label1.setText(ser.open())
 
 def disconnect():
-    ser.close()
+    label1.setText(ser.close())
 
 if __name__ == '__main__':
     # Create main application window
     app = QApplication([])
     app.setStyle(QStyleFactory.create("Cleanlooks"))
     mainWindow = QMainWindow()
-    mainWindow.setWindowTitle('Joystick example')
+    app.setApplicationName("NTUST MAZE by kevin")
+    app.setWindowIcon(QIcon("img/ntust.png"))
+    # mainWindow.setWindowTitle('Joystick example')
 
     # Create and set widget layout
     # Main widget container
@@ -51,17 +60,23 @@ if __name__ == '__main__':
     # serial
     ser = kevin_serial.SerialFuc()
 
+    # label
+    label1 = QLabel()
+    label1.setText('Disconnect')
+
     # 下拉選單
     combobox1 = QComboBox()
-    ports = kevin_serial.serial_ports()
-    combobox1.addItems(ports)
+    # ports = kevin_serial.serial_ports()
+    # combobox1.addItems(ports)
     combobox1.activated[str].connect(Combobox1Changed)
 
     # 按鈕
-    button1 = QPushButton('connect')
-    button1.clicked.connect(connect)
-    button2 = QPushButton('disconnect')
-    button2.clicked.connect(disconnect)
+    button1 = QPushButton('refresh')
+    button1.clicked.connect(refresh)
+    button2 = QPushButton('connect')
+    button2.clicked.connect(connect)
+    button3 = QPushButton('disconnect')
+    button3.clicked.connect(disconnect)
 
     # Create joystick
     joystick_qwidget = joystick.Joystick()
@@ -76,9 +91,11 @@ if __name__ == '__main__':
     layout.addLayout(layout2)
 
     # layout2
+    layout2.addWidget(label1)
     layout2.addWidget(combobox1)
     layout2.addWidget(button1)
     layout2.addWidget(button2)
+    layout2.addWidget(button3)
     layout2.addWidget(joystick_qwidget)
     
 

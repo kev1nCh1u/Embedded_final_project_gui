@@ -39,11 +39,16 @@ class SerialFuc():
             self.ser.timeout = 1
         else:
             self.ser = serial.Serial(port, 115200, timeout=1)  # open serial port
-            print(self.ser.name)         # check which port was really used
+            # print(self.ser.name)         # check which port was really used
 
     def changePort(self, port):
+        msg = ''
+        msg = self.ser.close()
         self.ser.port = port
+        msg = self.open()
         # print(self.ser.name)         # check which port was really used
+        # print(self.ser)
+        return msg
         
 
     def read(self):
@@ -60,14 +65,32 @@ class SerialFuc():
 
         print()
 
+    def portStatus(self):
+        return self.ser.isOpen
+
     def open(self):
+        msg = ''
+        # print(self.ser)
         try:
-            self.ser.open()             # open port
+            if(self.ser.name != None):
+                self.ser.open()             # open port
+                msg = 'Connect'
+            else:
+                msg = 'no port set'
         except:
-            print('Error no port !!!')
+            if(self.ser.isOpen == True):
+                msg = 'Already connect'
+            else:
+                msg = 'Error can not connect !!!'
+        # print(msg)
+        return msg
 
     def close(self):
+        msg = ''
         self.ser.close()             # close port
+        msg = 'Disconnect'
+        # print(msg)
+        return msg
 
 
 if __name__ == '__main__':
