@@ -13,7 +13,7 @@ def TimerLoop():
     print(joystick_qwidget.joyPosXY)
     x = joystick_qwidget.joyPosXY[0]/10
     y = joystick_qwidget.joyPosXY[1]/10
-        
+
     # 3d move
     v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
     v3d_qwidget.render.GetActiveCamera().Azimuth(180)
@@ -29,7 +29,9 @@ if __name__ == '__main__':
     # Create and set widget layout
     # Main widget container
     window = QWidget()
-    layout = QGridLayout()
+    # layout = QGridLayout()
+    layout = QHBoxLayout()
+    layout2 = QVBoxLayout()
     window.setLayout(layout)
     mainWindow.setCentralWidget(window)
 
@@ -44,22 +46,24 @@ if __name__ == '__main__':
     button2 = QPushButton('button2')
     # button1.clicked.connect()
 
+    
+    combobox1 = QComboBox()
+    combobox1.addItems
+
     timer = QTimer()  # 呼叫 QTimer
     timer.timeout.connect(TimerLoop)  # 當時間到時會執行 run
     timer.start(1)  # 啟動 Timer .. 每隔1000ms 會觸發 run
 
-    # 水平佈局
-    # layout = QHBoxLayout()
-    # layout2 = QVBoxLayout()
-    # layout.addWidget(vll)
-    # layout2.addWidget(button1)
-    # layout2.addWidget(button2)
-    # layout.addLayout(layout2)
-
     # layout
-    # layout.addLayout(joystick.get_joystick_layout(),0,0)
-    layout.addWidget(joystick_qwidget, 0, 1)
-    layout.addWidget(v3d_qwidget, 0, 0)
+    layout.addWidget(v3d_qwidget)
+    layout.addLayout(layout2)
+
+    # layout2
+    layout2.addWidget(combobox1)
+    layout2.addWidget(button1)
+    layout2.addWidget(button2)
+    layout2.addWidget(joystick_qwidget)
+    
 
     mainWindow.show()
 
