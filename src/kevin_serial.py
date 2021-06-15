@@ -53,38 +53,39 @@ class SerialFuc():
 
     def read(self):
         data = (0,0)
-        try:
-            self.ser.reset_input_buffer()
 
+        if self.ser.is_open:
             while 1:
-                self.ser.write(1)
+                self.ser.write(chr(71).encode())
                 
                 buff = self.ser.read().decode()        # read one byte
+                # print(buff)
+                # print(self.ser.readline())
+
                 if buff != '':
                     buff = ord(buff)
                 # print(buff)
-                if buff == 53:
+                if buff == 83:
                     break
-
-            # data[0] = ord(self.ser.read().decode('utf-8'))        # read one byte
-            # data[1] = ord(self.ser.read().decode('utf-8'))        # read one byte
 
             x = ord(self.ser.read().decode('utf-8'))        # read one byte
             y = ord(self.ser.read().decode('utf-8'))        # read one byte
             data = (x, y)
 
-        except:
-            data = (1,1)
-
         # print(data)
 
         return data
     
-    def write(self):
-        ser.write(b'hello')     # write a string
+    def write(self, x, y):
+        if self.ser.is_open:
+            # print(x,y)
+            self.ser.write(chr(67).encode())
+            self.ser.write(chr(x).encode())
+            self.ser.write(chr(y).encode())
+            # print(self.ser.readline())
 
     def portStatus(self):
-        return self.ser.isOpen
+        return self.ser.is_open
 
     def open(self):
         msg = ''
@@ -96,7 +97,7 @@ class SerialFuc():
             else:
                 msg = 'no port set'
         except:
-            if self.ser.isOpen == True:
+            if self.ser.is_open == True:
                 msg = 'Already connect'
             else:
                 msg = 'Error can not connect !!!'
@@ -120,5 +121,5 @@ if __name__ == '__main__':
 
     ser = SerialFuc(ports[0])
     while 1:
-        input()
+        # input()
         print(ser.read())

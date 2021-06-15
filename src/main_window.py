@@ -9,23 +9,32 @@ import joystick
 import pyqt_3d
 import kevin_serial
 
+
 def TimerLoop():
     # print(joystick_qwidget.joyPosXY)
-    x = joystick_qwidget.joyPosXY[0]/10
-    y = joystick_qwidget.joyPosXY[1]/10
+    x = int(joystick_qwidget.joyPosXY[0]) + 50
+    y = int(joystick_qwidget.joyPosXY[1]) + 50
+    label4.setText('JOY_X:\0' + str(x))
+    label5.setText('JOY_Y:\0' + str(y))
+    if x != 50 or y != 50:
+        if ser.portStatus:
+            ser.write(x, y)
 
     # 3d move
-    v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
-    v3d_qwidget.render.GetActiveCamera().Azimuth(180)
-    v3d_qwidget.render.ResetCamera()
+    # v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
+    # v3d_qwidget.render.GetActiveCamera().Azimuth(180)
+    # v3d_qwidget.render.ResetCamera()
 
-    input = ser.read()
-    label2.setText(str(input[0]))
-    label3.setText(str(input[1]))
+    if ser.portStatus:
+        input = ser.read()
+        label2.setText('SERVO_X:\0' + str(input[0]))
+        label3.setText('SERVO_Y:\0' + str(input[1]))
+
 
 def Combobox1Changed(text):
     # print(text)
     label1.setText(ser.changePort(text))
+
 
 def refresh():
     ser.close()
@@ -33,12 +42,15 @@ def refresh():
     # print('refresh',ports)
     combobox1.clear()
     combobox1.addItems(ports)
-    
+
+
 def connect():
     label1.setText(ser.open())
 
+
 def disconnect():
     label1.setText(ser.close())
+
 
 if __name__ == '__main__':
     # Create main application window
@@ -67,24 +79,43 @@ if __name__ == '__main__':
     # label
     label1 = QLabel()
     label1.setText('Disconnect')
+    label1.setFont(QFont('Times', 20))
     label2 = QLabel()
     label2.setText('0')
+    label2.setFont(QFont('Times', 20))
     label3 = QLabel()
-    label3.setText('1')
+    label3.setText('0')
+    label3.setFont(QFont('Times', 20))
+    label4 = QLabel()
+    label4.setText('0')
+    label4.setFont(QFont('Times', 20))
+    label5 = QLabel()
+    label5.setText('0')
+    label5.setFont(QFont('Times', 20))
+    label6 = QLabel()
+    label6.setText('Virtual') # real virtual
+    label6.setFont(QFont('Times', 20))
 
     # 下拉選單
     combobox1 = QComboBox()
+    combobox1.setFont(QFont('Times', 20))
     # ports = kevin_serial.serial_ports()
     # combobox1.addItems(ports)
     combobox1.activated[str].connect(Combobox1Changed)
 
     # 按鈕
-    button1 = QPushButton('refresh')
+    button1 = QPushButton('Refresh')
     button1.clicked.connect(refresh)
-    button2 = QPushButton('connect')
+    button1.setFont(QFont('Times', 20))
+    button2 = QPushButton('Connect')
     button2.clicked.connect(connect)
-    button3 = QPushButton('disconnect')
+    button2.setFont(QFont('Times', 20))
+    button3 = QPushButton('Disconnect')
     button3.clicked.connect(disconnect)
+    button3.setFont(QFont('Times', 20))
+    button4 = QPushButton('Control')
+    button4.clicked.connect(disconnect)
+    button4.setFont(QFont('Times', 20))
 
     # Create joystick
     joystick_qwidget = joystick.Joystick()
@@ -104,10 +135,13 @@ if __name__ == '__main__':
     layout2.addWidget(button1)
     layout2.addWidget(button2)
     layout2.addWidget(button3)
+    layout2.addWidget(button4)
+    layout2.addWidget(label6)
     layout2.addWidget(label2)
     layout2.addWidget(label3)
     layout2.addWidget(joystick_qwidget)
-    
+    layout2.addWidget(label4)
+    layout2.addWidget(label5)
 
     mainWindow.show()
 
