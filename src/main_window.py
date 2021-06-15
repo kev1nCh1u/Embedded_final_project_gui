@@ -7,10 +7,10 @@ from PyQt5.QtCore import QTimer
 
 import joystick
 import pyqt_3d
-
+import kevin_serial
 
 def TimerLoop():
-    print(joystick_qwidget.joyPosXY)
+    # print(joystick_qwidget.joyPosXY)
     x = joystick_qwidget.joyPosXY[0]/10
     y = joystick_qwidget.joyPosXY[1]/10
 
@@ -18,6 +18,16 @@ def TimerLoop():
     v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
     v3d_qwidget.render.GetActiveCamera().Azimuth(180)
     v3d_qwidget.render.ResetCamera()
+
+def Combobox1Changed(text):
+    # print(text)
+    ser.changePort(text)
+
+def connect():
+    ser.open()
+
+def disconnect():
+    ser.close()
 
 if __name__ == '__main__':
     # Create main application window
@@ -35,21 +45,28 @@ if __name__ == '__main__':
     window.setLayout(layout)
     mainWindow.setCentralWidget(window)
 
-    # Create joystick
-    joystick_qwidget = joystick.Joystick()
-
     # Create 3d
     v3d_qwidget = pyqt_3d.Visualization3d()
 
-    # 按鈕
-    button1 = QPushButton('button1')
-    button2 = QPushButton('button2')
-    # button1.clicked.connect()
+    # serial
+    ser = kevin_serial.SerialFuc()
 
-    
+    # 下拉選單
     combobox1 = QComboBox()
-    combobox1.addItems
+    ports = kevin_serial.serial_ports()
+    combobox1.addItems(ports)
+    combobox1.activated[str].connect(Combobox1Changed)
 
+    # 按鈕
+    button1 = QPushButton('connect')
+    button1.clicked.connect(connect)
+    button2 = QPushButton('disconnect')
+    button2.clicked.connect(disconnect)
+
+    # Create joystick
+    joystick_qwidget = joystick.Joystick()
+
+    # timer
     timer = QTimer()  # 呼叫 QTimer
     timer.timeout.connect(TimerLoop)  # 當時間到時會執行 run
     timer.start(1)  # 啟動 Timer .. 每隔1000ms 會觸發 run

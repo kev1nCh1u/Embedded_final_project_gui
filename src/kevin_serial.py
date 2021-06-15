@@ -31,10 +31,20 @@ def serial_ports():
     return result
 
 class SerialFuc():
-    def __init__(self, port):
+    def __init__(self, port='nan'):
         super().__init__()
-        self.ser = serial.Serial(port, 115200, timeout=1)  # open serial port
-        print(self.ser.name)         # check which port was really used
+        if(port == 'nan'):
+            self.ser = serial.Serial()
+            self.ser.baudrate = 115200
+            self.ser.timeout = 1
+        else:
+            self.ser = serial.Serial(port, 115200, timeout=1)  # open serial port
+            print(self.ser.name)         # check which port was really used
+
+    def changePort(self, port):
+        self.ser.port = port
+        # print(self.ser.name)         # check which port was really used
+        
 
     def read(self):
         # ser.write(b'hello')     # write a string
@@ -49,6 +59,12 @@ class SerialFuc():
         print(line)
 
         print()
+
+    def open(self):
+        try:
+            self.ser.open()             # open port
+        except:
+            print('Error no port !!!')
 
     def close(self):
         self.ser.close()             # close port
