@@ -19,6 +19,10 @@ def TimerLoop():
     v3d_qwidget.render.GetActiveCamera().Azimuth(180)
     v3d_qwidget.render.ResetCamera()
 
+    input = ser.read()
+    label2.setText(str(input[0]))
+    label3.setText(str(input[1]))
+
 def Combobox1Changed(text):
     # print(text)
     label1.setText(ser.changePort(text))
@@ -63,6 +67,10 @@ if __name__ == '__main__':
     # label
     label1 = QLabel()
     label1.setText('Disconnect')
+    label2 = QLabel()
+    label2.setText('0')
+    label3 = QLabel()
+    label3.setText('1')
 
     # 下拉選單
     combobox1 = QComboBox()
@@ -96,6 +104,8 @@ if __name__ == '__main__':
     layout2.addWidget(button1)
     layout2.addWidget(button2)
     layout2.addWidget(button3)
+    layout2.addWidget(label2)
+    layout2.addWidget(label3)
     layout2.addWidget(joystick_qwidget)
     
 

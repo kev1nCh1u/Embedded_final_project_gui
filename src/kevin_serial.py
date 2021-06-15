@@ -33,12 +33,12 @@ def serial_ports():
 class SerialFuc():
     def __init__(self, port='nan'):
         super().__init__()
-        if(port == 'nan'):
+        if port == 'nan':
             self.ser = serial.Serial()
             self.ser.baudrate = 115200
-            self.ser.timeout = 1
+            self.ser.timeout = 0.1
         else:
-            self.ser = serial.Serial(port, 115200, timeout=1)  # open serial port
+            self.ser = serial.Serial(port, 115200, timeout=0.1)  # open serial port
             # print(self.ser.name)         # check which port was really used
 
     def changePort(self, port):
@@ -52,18 +52,36 @@ class SerialFuc():
         
 
     def read(self):
-        # ser.write(b'hello')     # write a string
+        data = (0,0)
+        try:
+            self.ser.reset_input_buffer()
 
-        # x = self.ser.read()          # read one byte
-        # print(x)
+            while 1:
+                self.ser.write(1)
+                
+                buff = self.ser.read().decode()        # read one byte
+                if buff != '':
+                    buff = ord(buff)
+                # print(buff)
+                if buff == 53:
+                    break
 
-        # s = self.ser.read(10)        # read up to ten bytes (timeout)
-        # print(s)
-        
-        line = self.ser.readline()   # read a '\n' terminated line
-        print(line)
+            # data[0] = ord(self.ser.read().decode('utf-8'))        # read one byte
+            # data[1] = ord(self.ser.read().decode('utf-8'))        # read one byte
 
-        print()
+            x = ord(self.ser.read().decode('utf-8'))        # read one byte
+            y = ord(self.ser.read().decode('utf-8'))        # read one byte
+            data = (x, y)
+
+        except:
+            data = (1,1)
+
+        # print(data)
+
+        return data
+    
+    def write(self):
+        ser.write(b'hello')     # write a string
 
     def portStatus(self):
         return self.ser.isOpen
@@ -72,13 +90,13 @@ class SerialFuc():
         msg = ''
         # print(self.ser)
         try:
-            if(self.ser.name != None):
+            if self.ser.name != None:
                 self.ser.open()             # open port
                 msg = 'Connect'
             else:
                 msg = 'no port set'
         except:
-            if(self.ser.isOpen == True):
+            if self.ser.isOpen == True:
                 msg = 'Already connect'
             else:
                 msg = 'Error can not connect !!!'
@@ -98,8 +116,9 @@ if __name__ == '__main__':
     for i in range(len(ports)):
         print(i, ':', ports[i], ' ', sep='')
 
-    port_num = int(input('Please chose a port(0,1,2...): '))
+    # port_num = int(input('Please chose a port(0,1,2...): '))
 
-    ser = SerialFuc(ports[port_num])
+    ser = SerialFuc(ports[0])
     while 1:
-        ser.read()
+        input()
+        print(ser.read())
