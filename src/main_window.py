@@ -19,11 +19,11 @@ def TimerLoop():
     if x != 50 or y != 50:
         if ser.portStatus:
             ser.write('V',x, y)
-            label6.setText('Control: Virtual') # real virtual
+            label6.setText('Control:\0Virtual') # real virtual
     else:
         if ser.portStatus:
             ser.write('R')
-            label6.setText('Control: Real') # real virtual
+            label6.setText('Control:\0Real') # real virtual
 
     # 3d move
     # v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
@@ -50,7 +50,7 @@ def refresh():
 
 
 def connect():
-    label1.setText(ser.open())
+    label1.setText(ser.open(combobox1.currentText()))
 
 
 def disconnect():
@@ -98,15 +98,16 @@ if __name__ == '__main__':
     label5.setText('0')
     label5.setFont(QFont('Times', 20))
     label6 = QLabel()
-    label6.setText('Control: real') # real virtual
+    label6.setText('Control:\0real') # real virtual
     label6.setFont(QFont('Times', 20))
 
     # 下拉選單
     combobox1 = QComboBox()
     combobox1.setFont(QFont('Times', 20))
-    # ports = kevin_serial.serial_ports()
-    # combobox1.addItems(ports)
-    combobox1.activated[str].connect(Combobox1Changed)
+    ports = kevin_serial.serial_ports()
+    combobox1.addItems(ports)
+    # combobox1.activated[str].connect(Combobox1Changed)
+    label1.setText(ser.changePort(combobox1.currentText()))
 
     # 按鈕
     button1 = QPushButton('Refresh')
@@ -118,9 +119,6 @@ if __name__ == '__main__':
     button3 = QPushButton('Disconnect')
     button3.clicked.connect(disconnect)
     button3.setFont(QFont('Times', 20))
-    button4 = QPushButton('Control')
-    button4.clicked.connect(disconnect)
-    button4.setFont(QFont('Times', 20))
 
     # Create joystick
     joystick_qwidget = joystick.Joystick()
@@ -140,7 +138,6 @@ if __name__ == '__main__':
     layout2.addWidget(button1)
     layout2.addWidget(button2)
     layout2.addWidget(button3)
-    layout2.addWidget(button4)
     layout2.addWidget(label6)
     layout2.addWidget(label2)
     layout2.addWidget(label3)

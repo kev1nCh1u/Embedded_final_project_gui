@@ -91,9 +91,12 @@ class SerialFuc():
     def portStatus(self):
         return self.ser.is_open
 
-    def open(self):
+    def open(self, port=''):
         msg = ''
         # print(self.ser)
+        if port != '' and port != self.ser.port:
+            msg = self.ser.close()
+            self.ser.port = port
         try:
             if self.ser.name != None:
                 self.ser.open()             # open port
