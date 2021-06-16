@@ -18,7 +18,12 @@ def TimerLoop():
     label5.setText('JOY_Y:\0' + str(y))
     if x != 50 or y != 50:
         if ser.portStatus:
-            ser.write(x, y)
+            ser.write('V',x, y)
+            label6.setText('Control: Virtual') # real virtual
+    else:
+        if ser.portStatus:
+            ser.write('R')
+            label6.setText('Control: Real') # real virtual
 
     # 3d move
     # v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
@@ -93,7 +98,7 @@ if __name__ == '__main__':
     label5.setText('0')
     label5.setFont(QFont('Times', 20))
     label6 = QLabel()
-    label6.setText('Virtual') # real virtual
+    label6.setText('Control: real') # real virtual
     label6.setFont(QFont('Times', 20))
 
     # 下拉選單

@@ -76,13 +76,17 @@ class SerialFuc():
 
         return data
     
-    def write(self, x, y):
+    def write(self, mode, x=0, y=0):
         if self.ser.is_open:
             # print(x,y)
             self.ser.write(chr(67).encode())
-            self.ser.write(chr(x).encode())
-            self.ser.write(chr(y).encode())
-            # print(self.ser.readline())
+            if mode == 'R':
+                self.ser.write(chr(82).encode())
+            elif mode == 'V':
+                self.ser.write(chr(86).encode())
+                self.ser.write(chr(x).encode())
+                self.ser.write(chr(y).encode())
+                # print(self.ser.readline())
 
     def portStatus(self):
         return self.ser.is_open
