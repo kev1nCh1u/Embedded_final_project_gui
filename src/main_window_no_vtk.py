@@ -107,7 +107,7 @@ if __name__ == '__main__':
     ports = kevin_serial.serial_ports()
     combobox1.addItems(ports)
     # combobox1.activated[str].connect(Combobox1Changed)
-    label1.setText(ser.changePort(combobox1.currentText()))
+    # label1.setText(ser.changePort(combobox1.currentText()))
 
     # 按鈕
     button1 = QPushButton('Refresh')
@@ -132,19 +132,32 @@ if __name__ == '__main__':
     # layout.addWidget(v3d_qwidget)
     layout.addLayout(layout2)
 
-    # layout2
+    layout3 = QVBoxLayout()
+    layout3.addWidget(label2)
+    layout3.addWidget(label3)
+    verticalSpacer = QSpacerItem(40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    layout3.addItem(verticalSpacer)
+
+    layout4 = QVBoxLayout()
+    layout4.addWidget(label4)
+    layout4.addWidget(label5)
+    layout4.addWidget(joystick_qwidget)
+
+    layout5 = QHBoxLayout()
+    layout5.addLayout(layout3)
+    verticalSpacer = QSpacerItem(40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    layout5.addItem(verticalSpacer)
+    layout5.addLayout(layout4)
+
     layout2.addWidget(label1)
     layout2.addWidget(combobox1)
     layout2.addWidget(button1)
     layout2.addWidget(button2)
     layout2.addWidget(button3)
     layout2.addWidget(label6)
-    layout2.addWidget(label2)
-    layout2.addWidget(label3)
-    layout2.addWidget(joystick_qwidget)
-    layout2.addWidget(label4)
-    layout2.addWidget(label5)
-
+    layout2.addLayout(layout5)
+    
+    # show
     mainWindow.show()
 
     # Start Qt event loop unless running in interactive mode or using pyside.

@@ -107,7 +107,7 @@ if __name__ == '__main__':
     ports = kevin_serial.serial_ports()
     combobox1.addItems(ports)
     # combobox1.activated[str].connect(Combobox1Changed)
-    label1.setText(ser.changePort(combobox1.currentText()))
+    # label1.setText(ser.changePort(combobox1.currentText()))
 
     # 按鈕
     button1 = QPushButton('Refresh')
