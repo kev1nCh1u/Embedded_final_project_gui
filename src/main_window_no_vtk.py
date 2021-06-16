@@ -18,12 +18,12 @@ def TimerLoop():
     label5.setText('JOY_Y:\0' + str(y))
     if x != 50 or y != 50:
         if ser.portStatus:
-            ser.write('V',x, y)
-            label6.setText('Control:\0Virtual') # real virtual
+            ser.write('V', x, y)
+            label6.setText('Control:\0Virtual')  # real virtual
     else:
         if ser.portStatus:
             ser.write('R')
-            label6.setText('Control:\0Real') # real virtual
+            label6.setText('Control:\0Real')  # real virtual
 
     # 3d move
     # v3d_qwidget.render.GetActiveCamera().SetPosition(x, y, 0.1)
@@ -98,8 +98,24 @@ if __name__ == '__main__':
     label5.setText('0')
     label5.setFont(QFont('Times', 20))
     label6 = QLabel()
-    label6.setText('Control:\0real') # real virtual
+    label6.setText('Control:\0real')  # real virtual
     label6.setFont(QFont('Times', 20))
+
+    # create label
+    # labelGif = QLabel()
+    # labelGif.setGeometry(QRect(25, 25, 200, 200))
+    # labelGif.setMinimumSize(QSize(900, 700))
+    # labelGif.setMaximumSize(QSize(900, 700))
+    # labelGif.setObjectName("label")
+    # gifMovie = QMovie("img/cad_gif.GIF")
+    # labelGif.setMovie(gifMovie)
+    # gifMovie.start()
+
+    # creating label image
+    labelImg = QLabel()
+    pixmap = QPixmap('img/cad_img.png')
+    labelImg.setPixmap(pixmap)
+    labelImg.resize(pixmap.width(), pixmap.height())
 
     # 下拉選單
     combobox1 = QComboBox()
@@ -130,22 +146,27 @@ if __name__ == '__main__':
 
     # layout
     # layout.addWidget(v3d_qwidget)
+    # layout.addWidget(labelGif)
+    layout.addWidget(labelImg)
     layout.addLayout(layout2)
 
+    verticalSpacer = QSpacerItem(
+        40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
     layout3 = QVBoxLayout()
     layout3.addWidget(label2)
     layout3.addWidget(label3)
-    verticalSpacer = QSpacerItem(40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
     layout3.addItem(verticalSpacer)
 
     layout4 = QVBoxLayout()
     layout4.addWidget(label4)
     layout4.addWidget(label5)
     layout4.addWidget(joystick_qwidget)
+    layout4.addItem(verticalSpacer)
 
     layout5 = QHBoxLayout()
     layout5.addLayout(layout3)
-    verticalSpacer = QSpacerItem(40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    verticalSpacer = QSpacerItem(
+        40, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
     layout5.addItem(verticalSpacer)
     layout5.addLayout(layout4)
 
@@ -156,7 +177,7 @@ if __name__ == '__main__':
     layout2.addWidget(button3)
     layout2.addWidget(label6)
     layout2.addLayout(layout5)
-    
+
     # show
     mainWindow.show()
 

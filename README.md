@@ -4,6 +4,13 @@
     pip install PyQt5
     pip install pyserial
     pip install vtk
+
+## pi touch screen
+https://github.com/waveshare/LCD-show
+
+校正
+
+    sudo xinput_calibrator
 ## ref
 https://blog.csdn.net/valoz/article/details/104768671
 
